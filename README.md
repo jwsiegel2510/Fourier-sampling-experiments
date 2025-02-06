@@ -1,1 +1,1 @@
-# Continuous Compressive Sensing
+# Compressive Sensing Imaging Experiments
