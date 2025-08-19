@@ -207,13 +207,17 @@ def minimal_BV_norm_reconstruction(fourier_coefficients, mask, step_size = 0.2):
   """
   # Set the Fourier coefficients outside of the mask equal to 0.
   fourier_coefficients = fourier_coefficients * mask
+
   n1 = fourier_coefficients.shape[0]
   k = int(math.floor(math.log2(n1)))
   indices = 1.0j * fft.fftfreq(n1, d=1.0/n1)
   x_factor, y_factor = np.meshgrid(indices, indices)
+
+  # Construct derivative variables on a larger grid (for estimating the l1-norm)
   n2 = 2 * n1 - 1
   lambda_x = np.zeros((n2, n2), dtype = 'complex')
   lambda_y = np.zeros((n2, n2), dtype = 'complex')
+
   # Run ADMM for 2000 steps.
   print('Running ADMM for iterations:')
   for i in range(2000):
