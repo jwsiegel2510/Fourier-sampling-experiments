@@ -218,7 +218,7 @@ def minimal_BV_norm_reconstruction(fourier_coefficients, mask, step_size = 0.2):
   lambda_x = np.zeros((n2, n2), dtype = 'complex')
   lambda_y = np.zeros((n2, n2), dtype = 'complex')
 
-  # Run ADMM for 2000 steps.
+  # Run ADMM for 2000 steps. Probably overkill, but want to ensure convergence.
   print('Running ADMM for iterations:')
   for i in range(2000):
     print(i)
@@ -239,32 +239,33 @@ def minimal_BV_norm_reconstruction(fourier_coefficients, mask, step_size = 0.2):
     lambda_y = lambda_y + y_deriv - inverse_fourier_transform(fourier_coefficients * y_factor, k+1)
   return inverse_fourier_transform(fourier_coefficients, k)
 
-def plot_image(img):
+def plot_image(img, title=""):
     plt.imshow(img, cmap='Greys_r')
     plt.xticks([],[])
     plt.yticks([],[])
+    plt.title(title)
     plt.show()
 
 def main():
   image, fourier = generate_ground_truth_image(10)
-  plot_image(image)
+  plot_image(image, "Ground Truth")
 
   # Reconstruct using lowest Fourier modes.
   k = 4
-  plot_image(np.real(linear_reconstruction(fourier, k, smoothing=False)))
-  plot_image(np.real(linear_reconstruction(fourier, k, smoothing=True)))
+  plot_image(np.real(linear_reconstruction(fourier, k, smoothing=False)), "Reconstruction by Summing Fourier Series")
+  plot_image(np.real(linear_reconstruction(fourier, k, smoothing=True)), "Reconstruction by de la Vallee Poisson Summation")
   mask = generate_square_mask(k, 10)
-  plot_image(np.real(minimal_BV_norm_reconstruction(fourier, mask)))
+  plot_image(np.real(minimal_BV_norm_reconstruction(fourier, mask)), "Reconstruction by BV-norm minimization (lowest frequencies)")
 
   # Reconstruct using random Fourier modes.
   mask = generate_uniform_random_mask(10, (2**k+1)*(2**k+1))
-  plot_image(np.real(minimal_BV_norm_reconstruction(fourier, mask)))
+  plot_image(np.real(minimal_BV_norm_reconstruction(fourier, mask)), "Reconstruction by BV-norm minimization (uniform random sub-sampling)")
 
   # Reconstruct using subsampled Fourier modes of the same size.
   mask = generate_random_tapered_mask(3, 0.765, 10)
   # Print the number of frequencies sampled.
   print(np.sum(mask))
-  plot_image(np.real(minimal_BV_norm_reconstruction(fourier, mask)))
+  plot_image(np.real(minimal_BV_norm_reconstruction(fourier, mask)), "Reconstruction by BV-norm minimization (hierarchical random sub-sampling)")
   
 
 if __name__ == '__main__':
