@@ -1,4 +1,4 @@
-# Compressive Sensing Imaging Experiments
+# Fourier Sampling Experiments
 
 This repository contains a demonstration of reconstruction via hierarchically sub-sampled Fourier coefficients, which realize the Fourier sampling numbers for Besov spaces. A nearly optimal estimate for the Fourier sampling numbers, a discussion of the implications for practical imaging problems, and a detailed description of the experiments can be found in the paper:
 
