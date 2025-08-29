@@ -266,6 +266,16 @@ def main():
   # Print the number of frequencies sampled.
   print(np.sum(mask))
   plot_image(np.real(minimal_BV_norm_reconstruction(fourier, mask)), "Reconstruction by BV-norm minimization (hierarchical random sub-sampling)")
+
+  # Repeat experiments with 1089 Fourier samples.
+  k = 5
+
+  mask = generate_square_mask(k, 10)
+  plot_image(np.real(minimal_BV_norm_reconstruction(fourier, mask)), "Reconstruction by BV-norm minimization (lowest frequencies: 1089)")
+
+  mask = generate_random_tapered_mask(4, 0.786, 10)
+  print(np.sum(mask))
+  plot_image(np.real(minimal_BV_norm_reconstruction(fourier, mask)), "Reconstruction by BV-norm minimization (hierarchical random sub-sampling: 1089)")
   
 
 if __name__ == '__main__':
